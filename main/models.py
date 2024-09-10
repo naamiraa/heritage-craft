@@ -5,11 +5,12 @@ class Product(models.Model):
     name = models.CharField(max_length=255)
     price = models.IntegerField()
     description = models.TextField()
-    stock = models.IntegerField()
-    # Kain batik, ulos, tenun, & berbagai kerajinan tangan
-    category = models.CharField(max_length=100)
-    # daerah asal
-    place_of_origin = models.CharField(max_length=100)
-    # tanggal penambahan produk
-    date = models.DateField(auto_now_add=True)
+    image = models.CharField(max_length=255, default='images/default.avif') # Gambar produk
+    category = models.CharField(max_length=100) # Kain batik, ulos, tenun
+    place_of_origin = models.CharField(max_length=100) # daerah asal
+    stock = models.IntegerField() # Jumlah stok barang
+    availability = models.CharField(max_length=50, default='In Stock') # Ketersediaan
+
+    def __str__(self):
+        return self.name # Mengembalikan nama produk sebagai representasi string
 
