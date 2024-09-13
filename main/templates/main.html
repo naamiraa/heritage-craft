@@ -1,10 +1,57 @@
+{% extends 'base.html' %}
 {% load static %}
-
-<h1>{{nama_app}}</h1>
+{% block content %}
+<h1>Heritage Craft E-Commerce</h1>
 
 <h5>NPM: </h5>
-<p>{{ npm }}</p>
-<h5>Name: </h5>
-<p>{{ name }}</p> 
-<h5>Class: </h5>
+<p>{{ npm }}<p>
+
+<h5>Name:</h5>
+<p>{{ name }}</p>
+
+<h5>Class:</h5>
 <p>{{ class }}</p>
+
+{% if not product_entries %}
+<p>Belum ada data product pada Heritage Craft E-Commerce.</p>
+{% else %}
+<table>
+  <tr>
+    <th>Product Name</th>
+    <th>Price</th>
+    <th>Description</th>
+    <th>Image</th>
+    <th>Category</th>
+    <th>Place of Origin</th>
+    <th>Stock</th>
+    <th>Availability</th>
+    <th>Actions</th>
+  </tr>
+
+  {% comment %} Berikut cara memperlihatkan data mood di bawah baris ini 
+  {% endcomment %} 
+  {% for product_entry in product_entries %}
+  <tr>
+    <td>{{product_entry.name}}</td>
+    <td>{{product_entry.price}}</td>
+    <td>{{product_entry.description}}</td>
+    <td>
+        <a href="{% static product_entry.image %}" target="_blank">
+          <img src="{% static product_entry.image %}" alt="{{ product_entry.name }}" width="100" height="100">
+        </a>
+    </td>
+    <td>{{product_entry.category}}</td>
+    <td>{{product_entry.place_of_origin}}</td>
+    <td>{{product_entry.stock}}</td>
+    <td>{{product_entry.availability}}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endif %}
+
+<br />
+
+<a href="{% url 'main:create_product_entry' %}">
+  <button>Add New Product Entry</button>
+</a>
+{% endblock content %}
