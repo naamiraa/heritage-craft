@@ -89,7 +89,7 @@ urlpatterns = [
 ]
 ```
 
-# Melakukan deployment ke PWS
+## Melakukan deployment ke PWS
 Sebelum melakukan deployment ke PWS terlebih dulu syaa melakukan perintah python manage.py runserver yang kemudian dibuka pada http://localhost:8000/main untuk memastikan web dapat diakses. Kemudian saya memulai proses deployment pada PWS dengan langkah berikut:
 - Karena saya telah memiliki akun pada PWS langkah pertama yang saya lakukan hanyalah memulai dengan 'create new project'
 - Memberi project name kemudian klik create new project
@@ -129,7 +129,7 @@ Alasan model pada Django disebut sebagai ORM adalah karena Django memungkinkan u
 
 
 
-### (TUGAS 3)
+# (TUGAS 3)
 ## 1. Mengapa kita memerlukan data delivery dalam pengimplementasian sebuah platform?
 Dalam pengimplementasian platfrom, data delivery (pengiriman data) adalah aspek yang penting karena sebuah platform biasanya terhubung dengan berbagai client (seperti web atau mobile app) dan server. Platform sering melibatkan beberapa layanan atau komponen yang memerlukan pertukaran data, seperti antara frontend dan backend, atau dari aplikasi ke database. Proses data delivery memungkinkan komunikasi antara client dan server, sehingga data seperti produk apa saja yang tersedia di ecommerce ini dapat dikirim dan diterima secara efisien. Selain itu, di masa modern sekarang sangat dibutuhkan aplikasi yang berbasis real-time artinya kebutuhan akan data delivery yang cepat dan akurat menjadi sangat penting untuk menjaga performa platform.
 
