@@ -3,10 +3,10 @@ Nama: Namira Aulia
 Tautan PWS: [heritagecraft](http://namira-aulia31-heritagecraft.pbp.cs.ui.ac.id/)
 
 
-# (TUGAS 3)
+# (TUGAS 2)
 ## 1. Jelaskan bagaimana cara kamu mengimplementasikan checklist secara step-by-step
 ## Membuat proyek django baru
-- Langkah pertama yang saya lakukan untuk mengimplementasikan checklist tugas 1 ini adalah mulai dari ``membuat direktori baru`` di lokal dengan nama "heritage-craft" kemudian direktori "heritage-craft" tersebut dibuka melalui command prompt untuk membuat virtual environment dan mengaktifkannya. 
+- Langkah pertama yang saya lakukan untuk mengimplementasikan checklist tugas 2 ini adalah mulai dari ``membuat direktori baru`` di lokal dengan nama "heritage-craft" kemudian direktori "heritage-craft" tersebut dibuka melalui command prompt untuk membuat virtual environment dan mengaktifkannya. 
 
 - Selanjutnya saya mengkonfigurasi git agar direktori lokal dapat terhubung dengan git project dengan perintah ``git init``.
 
@@ -232,14 +232,14 @@ TEMPLATES = [
 
 
 # (TUGAS 4)
-### 1. Perbedaan antara ``HttpResponseRedirect()`` dan ``redirect()``
+## 1. Perbedaan antara ``HttpResponseRedirect()`` dan ``redirect()``
 Dilansir dari stackoverflow, jika ``HttpResponseRedirect()`` argumen pertama hanya dapat berupa url, nanti fungsi tersebut akan melakukan redirect sesuai parameter yang dimasukkan. Sedangkan argumeb yang dimasukkan pada ``Redirect()`` dapat berbeda - beda dapat menerima model, view, atau url sebagai argumennya jadi sedikit lebih fleksibel dalam hal apa yang dapat "dialihkan".
 
 
-### 2. Cara kerja penghubungan model ``Product`` dengan ``User``
+## 2. Cara kerja penghubungan model ``Product`` dengan ``User``
 Penghubungan model Product dengan User di Django dilakukan dengan menggunakan relasi ForeignKey. Artinya, setiap produk yang dibuat akan terkait dengan pengguna yang membuatnya. Kemudian mengisi field user dengan objek dari request user yang sedang ter-authorization. Selanjutnya kita dapat menyaring seluruh objek dengan hanya mengambil products dimana field user terisi dengan objek user yang sama dengan pengguna yang login pada waktu yang sama. Dengan demikian, hanya produk yang dimiliki oleh pengguna yang sedang login yang akan diambil.
 
-### 3. Perbedaan antara authentication dan authorization, apakah yang dilakukan saat pengguna login? Jelaskan bagaimana Django mengimplementasikan kedua konsep tersebut
+## 3. Perbedaan antara authentication dan authorization, apakah yang dilakukan saat pengguna login? Jelaskan bagaimana Django mengimplementasikan kedua konsep tersebut
 Berdasarkan ppt PBP terkait form, authentication, session, and Cookie dan juga penjelasan di kelas, perbedaan antara authentication dan authorization adalah jika autentikasi adalah proses memverifikasi siapa yang login sedangkan autorisasi adalah proses memverifikasi akses apa saja yang dapat dilakukan oleh user tersebut.
 
 Autentikasi adalah proses memverifikasi identitas pengguna. Biasanya dengan cara memasukkan username dan juga password di form login. Di Django, authentication dilakukan saat pengguna login melalui ``django.contrib.auth.authenticate()`` yang memverifikasi kredensial pengguna (biasanya username dan password)
@@ -250,7 +250,7 @@ Saat user login maka:
 - Django akan menjalankan authentication dengan mencocokkan username dan password dengan data yang ada di database
 - Jika berhasil, Django akan mengatur session untuk menyimpan informasi pengguna yang telah login. Setelah itu, berdasarkan apa saja yang dapat diakses, Django akan melakukan authorization untuk memastikan pengguna memiliki izin mengakses halaman tertentu yang sesuai. 
 
-### 4. Bagaimana Django mengingat pengguna yang telah login? Jelaskan kegunaan lain dari cookies dan apakah semua cookies aman digunakan?
+## 4. Bagaimana Django mengingat pengguna yang telah login? Jelaskan kegunaan lain dari cookies dan apakah semua cookies aman digunakan?
 - Bagaimana Django mengingat pengguna yang telah login?
     - Berdasarkan dengan apa yang telah dijelaskan saat kelas, Setelah pengguna login berhasil, Django membuat session. Session ini disimpan baik di server (misalnya di database) dan di client-side melalui cookies. Cookie yang digunakan untuk menyimpan session ID adalah ``sessionid``
     - Setiap kali pengguna melakukan request baru, cookie sessionid ini dikirimkan ke server, dan server memverifikasi session tersebut untuk mengingat siapa pengguna yang sedang login
@@ -270,15 +270,15 @@ Saat user login maka:
 - Apakah semua cookies aman digunakan?
 Tidak semua cookies aman. Potensi masalah dari cookies bisa seperti XSS (Cross-site Scripting): Jika cookie dapat diakses oleh skrip berbahaya, informasi sensitif seperti session bisa dicuri.
 
-### 5. Cara mengimplementasikan checklist
-#### Membuat implementasi register
+## 5. Cara mengimplementasikan checklist
+### Membuat implementasi register
 Pertama yang saya lakukan adalah menambahkan import ``UserCreationForm`` pada ``views.py`` yang memudahkan pembuatan formulir pendaftaran pengguna dalam aplikasi web. Setelah itu menambahkan fungsi register yang  berfungsi untuk menghasilkan formulir registrasi secara otomatis dan menghasilkan akun pengguna ketika data di-submit dari form. Kemudian membuat berkas baru dengan nama ``register.html`` pada direktori ``main/templates``dan juga menambahkan path url ke dalam ``urlpatterns`` yang ada di ``urls.py`` pada subdirektori ``main`` untuk mengakses fungsi register. 
 
-#### Membuat implementasi login
+### Membuat implementasi login
 Pada ``views.py`` saya melakukan import ``authenticate``, ``login``, dan ``AuthenticationForm`` yang dapat digunakan untuk melakukan autentikasi dan login (jika autentikasi berhasil) serta menambahkan fungsi baru dengan nama ``login_user`` . Kemudian membuat berkas baru dengan nama ``login.html`` pada folder ``main/templates``. Setelah itu import fungsi yang telah ditambahkan ke views.py tadi ke dalam ``urls.py`` dan menambahkan path url ke dalam ``urlpatterns``
 Saya juga membatasi akses ke halaman main agar hanya dapat diakses oleh pengguna yang sudah login dengan menambahkan ``@login_required(login_url='/login')`` di atas fungsi show_main pada views.py
 
-#### Membuat implementasi logout
+### Membuat implementasi logout
 Pada ``views.py`` saya melakukan import ``logout`` serta menambahkan fungsi baru dengan nama ``logout_user`` dengan kode berikut:
 ```python
         {
@@ -300,7 +300,7 @@ Kemudian pada berkas ``main.html`` saya menambahkan button logout di bagian pali
 ```
 Setelah itu import fungsi logout_user yang telah ditambahkan ke views.py tadi ke dalam ``urls.py`` dan menambahkan path url ke dalam ``urlpatterns``
 
-#### Implementasi Cookies dan last login
+### Implementasi Cookies dan last login
 Import ``datetime``, ``HttpsResponseRedirect``, dan ``reverse`` kemudian menambahkan fungsionalitas cookies di fungsi ``login_user`` pada ``views.py`` agar setiap login datanya disimpan di cookies dan dapat diakses. Lalu, saya menambahkan potongan kode ``'last_login': request.COOKIES['last_login']`` ke dalam variable context pada fungsi show_main dan juga mengubah fungsi ``logout_user`` menjadi berikut:
 ```python
         {
@@ -314,7 +314,7 @@ def logout_user(request):
 ``response.delete_cookie('last_login')`` berfungsi untuk menghapus cookie last_login saat pengguna melakukan logout
 Setelah itu, saya menambahkan informasi sesi terakhir login pada bagian setelah button logout pada file ``main.html``
 
-#### Menghubungkan Model Product dengan User
+### Menghubungkan Model Product dengan User
 Import ``from django.contrib.auth.models import User`` pada ``models.py`` dan menambahkan kode berikut pada model Product yang berfungsi untuk menghubungkan satu product dengan satu user melalui sebuah relationship, dimana sebuah Product pasti terasosiasikan dengan seorang user.
 ```python
         {
