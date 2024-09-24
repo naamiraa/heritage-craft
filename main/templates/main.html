@@ -35,8 +35,8 @@
     <td>{{product_entry.price}}</td>
     <td>{{product_entry.description}}</td>
     <td>
-        <a href="{% static product_entry.image %}" target="_blank">
-          <img src="{% static product_entry.image %}" alt="{{ product_entry.name }}" width="100" height="100">
+        <a href="{{ product_entry.image }}" target="_blank">
+          <img src="{{ product_entry.image }}" alt="{{ product_entry.name }}" width="100" height="100">
         </a>
     </td>
     <td>{{product_entry.category}}</td>
@@ -53,4 +53,12 @@
 <a href="{% url 'main:create_product_entry' %}">
   <button>Add New Product Entry</button>
 </a>
+
+<a href="{% url 'main:logout' %}">
+  <button>Logout</button>
+</a>
+
+<h5>Sesi terakhir login: {{ last_login }}</h5>
+<!-- <img src="https://private-user-images.githubusercontent.com/178132521/369440162-07b0f8d4-fddc-410c-8f09-fca5f11a0b70.jpg?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MjY4NDIzODYsIm5iZiI6MTcyNjg0MjA4NiwicGF0aCI6Ii8xNzgxMzI1MjEvMzY5NDQwMTYyLTA3YjBmOGQ0LWZkZGMtNDEwYy04ZjA5LWZjYTVmMTFhMGI3MC5qcGc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjQwOTIwJTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI0MDkyMFQxNDIxMjZaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT03N2RiMDg4ZDI2YTg3ZTJiZjAxYjM1YmJjMzMzMTQ0ZTc1NDE1NzYwZDc5MmRhMGE0NzQ1NTY5MTBlOGViZGUzJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9.q90XsYGsM-qLY0WuWBabg3FdFZ8RQiPlla6c08AA8sQ"> -->
 {% endblock content %}
+
