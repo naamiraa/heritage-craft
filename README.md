@@ -3,6 +3,7 @@ Nama: Namira Aulia
 Tautan PWS: [heritagecraft](http://namira-aulia31-heritagecraft.pbp.cs.ui.ac.id/)
 
 
+# (TUGAS 3)
 ## 1. Jelaskan bagaimana cara kamu mengimplementasikan checklist secara step-by-step
 ## Membuat proyek django baru
 - Langkah pertama yang saya lakukan untuk mengimplementasikan checklist tugas 1 ini adalah mulai dari ``membuat direktori baru`` di lokal dengan nama "heritage-craft" kemudian direktori "heritage-craft" tersebut dibuka melalui command prompt untuk membuat virtual environment dan mengaktifkannya. 
@@ -193,7 +194,7 @@ TEMPLATES = [
     ```python
             {
                 def show_xml(request):
-                    data = MoodEntry.objects.all()
+                    data = Product.objects.all()
                     return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
             }
     ```
@@ -228,3 +229,119 @@ TEMPLATES = [
 
 ## Screenshot hasil akses URL dalam format JSON_by_ID pada Postman
 ![](static/images/JSON_by_ID.png)
+
+
+# (TUGAS 4)
+### 1. Perbedaan antara ``HttpResponseRedirect()`` dan ``redirect()``
+Dilansir dari stackoverflow, jika ``HttpResponseRedirect()`` argumen pertama hanya dapat berupa url, nanti fungsi tersebut akan melakukan redirect sesuai parameter yang dimasukkan. Sedangkan argumeb yang dimasukkan pada ``Redirect()`` dapat berbeda - beda dapat menerima model, view, atau url sebagai argumennya jadi sedikit lebih fleksibel dalam hal apa yang dapat "dialihkan".
+
+
+### 2. Cara kerja penghubungan model ``Product`` dengan ``User``
+Penghubungan model Product dengan User di Django dilakukan dengan menggunakan relasi ForeignKey. Artinya, setiap produk yang dibuat akan terkait dengan pengguna yang membuatnya. Kemudian mengisi field user dengan objek dari request user yang sedang ter-authorization. Selanjutnya kita dapat menyaring seluruh objek dengan hanya mengambil products dimana field user terisi dengan objek user yang sama dengan pengguna yang login pada waktu yang sama. Dengan demikian, hanya produk yang dimiliki oleh pengguna yang sedang login yang akan diambil.
+
+### 3. Perbedaan antara authentication dan authorization, apakah yang dilakukan saat pengguna login? Jelaskan bagaimana Django mengimplementasikan kedua konsep tersebut
+Berdasarkan ppt PBP terkait form, authentication, session, and Cookie dan juga penjelasan di kelas, perbedaan antara authentication dan authorization adalah jika autentikasi adalah proses memverifikasi siapa yang login sedangkan autorisasi adalah proses memverifikasi akses apa saja yang dapat dilakukan oleh user tersebut.
+
+Autentikasi adalah proses memverifikasi identitas pengguna. Biasanya dengan cara memasukkan username dan juga password di form login. Di Django, authentication dilakukan saat pengguna login melalui ``django.contrib.auth.authenticate()`` yang memverifikasi kredensial pengguna (biasanya username dan password)
+
+Sedangkan authorization adalah proses menentukan hak akses pengguna. Authorization terjadi setelah proses autentikasi, yaitu menentukan apakah pengguna yang telah terautentikasi memiliki hak untuk melakukan tindakan tertentu atau mengakses resourses tertentu. Misalnya apakah pengguna dapat mengakses halaman admin atau mengubah data. Authorization di Django pada proyek ini ditangani dengan sistem ``@login_required(login_url='/login')`` agar halaman main hanya dapat diakses oleh pengguna yang sudah login (terautentikasi).
+
+Saat user login maka:
+- Django akan menjalankan authentication dengan mencocokkan username dan password dengan data yang ada di database
+- Jika berhasil, Django akan mengatur session untuk menyimpan informasi pengguna yang telah login. Setelah itu, berdasarkan apa saja yang dapat diakses, Django akan melakukan authorization untuk memastikan pengguna memiliki izin mengakses halaman tertentu yang sesuai. 
+
+### 4. Bagaimana Django mengingat pengguna yang telah login? Jelaskan kegunaan lain dari cookies dan apakah semua cookies aman digunakan?
+- Bagaimana Django mengingat pengguna yang telah login?
+    - Berdasarkan dengan apa yang telah dijelaskan saat kelas, Setelah pengguna login berhasil, Django membuat session. Session ini disimpan baik di server (misalnya di database) dan di client-side melalui cookies. Cookie yang digunakan untuk menyimpan session ID adalah ``sessionid``
+    - Setiap kali pengguna melakukan request baru, cookie sessionid ini dikirimkan ke server, dan server memverifikasi session tersebut untuk mengingat siapa pengguna yang sedang login
+
+- Kegunaan lain dari cookies:
+    Dilansir dari glints.com, berikut adalah beberapa fungsi dari cookies pada website:
+    - Menyimpan informasi login
+    - Menyediakan konten dan referesni yang personal
+    Melansir Hitechwhizz, cookies adalah teknologi dalam situs yang mampu menyediakan konten dan referensi kepada para user.
+    Sebagai contoh, cookies akan mengingat jenis konten yang sering kita lihat hingga pilihan fitur favorit kita
+    - Mengingat pengaturan situs
+    Cookies kan mengingat preferensi bahasa, mode warna, hingga resolusi yang dipilih oleh pengguna dalam situs.
+    Jadi, nantinya, saat pengguna mengakses kembali website tersebut, ia secara otomatis akan menyediakan pengaturan yang sesuai dengan pilihan sebelumnya.
+    - Targeting iklan
+    Sebagian besar perusahaan, khususnya, situs e-commerce cenderung menggunakan cookies untuk menargetkan produk ke pelanggan mereka. Informasi seperti istilah pencarian, keyword, dan lokasi geografis dikumpulkan untuk kampanye pemasaran mereka.
+
+- Apakah semua cookies aman digunakan?
+Tidak semua cookies aman. Potensi masalah dari cookies bisa seperti XSS (Cross-site Scripting): Jika cookie dapat diakses oleh skrip berbahaya, informasi sensitif seperti session bisa dicuri.
+
+### 5. Cara mengimplementasikan checklist
+#### Membuat implementasi register
+Pertama yang saya lakukan adalah menambahkan import ``UserCreationForm`` pada ``views.py`` yang memudahkan pembuatan formulir pendaftaran pengguna dalam aplikasi web. Setelah itu menambahkan fungsi register yang  berfungsi untuk menghasilkan formulir registrasi secara otomatis dan menghasilkan akun pengguna ketika data di-submit dari form. Kemudian membuat berkas baru dengan nama ``register.html`` pada direktori ``main/templates``dan juga menambahkan path url ke dalam ``urlpatterns`` yang ada di ``urls.py`` pada subdirektori ``main`` untuk mengakses fungsi register. 
+
+#### Membuat implementasi login
+Pada ``views.py`` saya melakukan import ``authenticate``, ``login``, dan ``AuthenticationForm`` yang dapat digunakan untuk melakukan autentikasi dan login (jika autentikasi berhasil) serta menambahkan fungsi baru dengan nama ``login_user`` . Kemudian membuat berkas baru dengan nama ``login.html`` pada folder ``main/templates``. Setelah itu import fungsi yang telah ditambahkan ke views.py tadi ke dalam ``urls.py`` dan menambahkan path url ke dalam ``urlpatterns``
+Saya juga membatasi akses ke halaman main agar hanya dapat diakses oleh pengguna yang sudah login dengan menambahkan ``@login_required(login_url='/login')`` di atas fungsi show_main pada views.py
+
+#### Membuat implementasi logout
+Pada ``views.py`` saya melakukan import ``logout`` serta menambahkan fungsi baru dengan nama ``logout_user`` dengan kode berikut:
+```python
+        {
+def logout_user(request):
+    logout(request)
+    return redirect('main:login')
+        }
+```
+``logout(request)`` digunakan untuk menghapus sesi pengguna yang saat ini masuk dan ``return redirect('main:login')`` mengarahkan user untuk ke halaman login dalam aplikasi Django.
+Kemudian pada berkas ``main.html`` saya menambahkan button logout di bagian paling bawah untuk mengarahkan ke URL berdasarkan app_name dan name yang sudah didefinisikan di urls.py 
+```python
+        {
+...
+<a href="{% url 'main:logout' %}">
+  <button>Logout</button>
+</a>
+...
+        }
+```
+Setelah itu import fungsi logout_user yang telah ditambahkan ke views.py tadi ke dalam ``urls.py`` dan menambahkan path url ke dalam ``urlpatterns``
+
+#### Implementasi Cookies dan last login
+Import ``datetime``, ``HttpsResponseRedirect``, dan ``reverse`` kemudian menambahkan fungsionalitas cookies di fungsi ``login_user`` pada ``views.py`` agar setiap login datanya disimpan di cookies dan dapat diakses. Lalu, saya menambahkan potongan kode ``'last_login': request.COOKIES['last_login']`` ke dalam variable context pada fungsi show_main dan juga mengubah fungsi ``logout_user`` menjadi berikut:
+```python
+        {
+def logout_user(request):
+    logout(request)
+    response = HttpResponseRedirect(reverse('main:login'))
+    response.delete_cookie('last_login')
+    return response
+        }
+```
+``response.delete_cookie('last_login')`` berfungsi untuk menghapus cookie last_login saat pengguna melakukan logout
+Setelah itu, saya menambahkan informasi sesi terakhir login pada bagian setelah button logout pada file ``main.html``
+
+#### Menghubungkan Model Product dengan User
+Import ``from django.contrib.auth.models import User`` pada ``models.py`` dan menambahkan kode berikut pada model Product yang berfungsi untuk menghubungkan satu product dengan satu user melalui sebuah relationship, dimana sebuah Product pasti terasosiasikan dengan seorang user.
+```python
+        {
+class MoodEntry(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    ...
+        }
+```
+Lalu, mengubah fungsi create_product_entry menjadi berikut:
+```python
+        {
+def create_product_entry(request):
+    form = Product(request.POST or None)
+
+    if form.is_valid() and request.method == "POST":
+        product_entry = form.save(commit=False)
+        product.user = request.user
+        product_entry.save()
+        return redirect('main:show_main')
+
+    context = {'form': form}
+    return render(request, "create_product_entry.html", context)
+ ...
+        }
+```
+kemudian mengubah value ``product`` menjadi ``product_entries = Product.objects.filter(user=request.user)`` nam variable ``name`` pada context diubah menjadi ``'name' : request.user.username,``
+
+Setelah semua proses di atas, kemudian saya melakukan makemigrations dan juga migrate untuk merefleksikan perubahan serta mengganti value dari variabel debug pada settings.py. Terakhir, saya membuat akun baru dan menambahkan beberapa product baru untuk memastikan bahwa product yang telah saya buat di akun sebelumnya tidak akan ditampilkan di halaman user yang baru saja saya buat. 
+
+Langkah terakhir pada tugas 4 ini, saya melakukan add, commit, dan push ke github
