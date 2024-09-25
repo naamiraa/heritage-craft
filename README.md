@@ -233,7 +233,7 @@ TEMPLATES = [
 
 # (TUGAS 4)
 ## 1. Perbedaan antara ``HttpResponseRedirect()`` dan ``redirect()``
-Dilansir dari stackoverflow, jika ``HttpResponseRedirect()`` argumen pertama hanya dapat berupa url, nanti fungsi tersebut akan melakukan redirect sesuai parameter yang dimasukkan. Sedangkan argumeb yang dimasukkan pada ``Redirect()`` dapat berbeda - beda dapat menerima model, view, atau url sebagai argumennya jadi sedikit lebih fleksibel dalam hal apa yang dapat "dialihkan".
+Dilansir dari stackoverflow, jika ``HttpResponseRedirect()`` argumen pertama hanya dapat berupa url, nanti fungsi tersebut akan melakukan redirect sesuai parameter yang dimasukkan. Sedangkan argumen yang dimasukkan pada ``Redirect()`` dapat berbeda - beda sehingga lebih fleksibel dalam hal apa yang dapat "dialihkan".
 
 
 ## 2. Cara kerja penghubungan model ``Product`` dengan ``User``
