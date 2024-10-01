@@ -5,28 +5,62 @@
 {% endblock meta %}
 
 {% block content %}
-<div class="login">
-  <h1>Login</h1>
+<div class="min-h-screen flex items-center justify-center w-screen bg-[#eeeeee] py-12 px-4 sm:px-6 lg:px-8"> 
+  <div class="max-w-md w-full space-y-8">
+    <div>
+      <h2 class="mt-6 text-center text-3xl font-extrabold text-[#ba9972]">
+        Login to HERITAGE CRAFT
+      </h2>
+    </div>
+    <form class="mt-8 space-y-6" method="POST" action="">
+      {% csrf_token %}
+      <input type="hidden" name="remember" value="true">
+      <div class="rounded-md shadow-sm">
+        <div>
+          <label for="username" class="sr-only">Username</label>
+          <input id="username" name="username" type="text" required class="appearance-none relative block w-full px-3 py-2 border border-[#ba9972] placeholder-gray-500 text-gray-900 bg-gray-100 rounded-t-md focus:outline-none focus:ring-[#ba9972] focus:border-[#ba9972] sm:text-sm" placeholder="Username">
+        </div>
+        <div>
+          <label for="password" class="sr-only">Password</label>
+          <input id="password" name="password" type="password" required class="appearance-none relative block w-full px-3 py-2 border border-[#ba9972] placeholder-gray-500 text-gray-900 bg-gray-100 rounded-b-md focus:outline-none focus:ring-[#ba9972] focus:border-[#ba9972] sm:text-sm" placeholder="Password">
+        </div>
+      </div>
 
-  <form method="POST" action="">
-    {% csrf_token %}
-    <table>
-      {{ form.as_table }}
-      <tr>
-        <td></td>
-        <td><input class="btn login_btn" type="submit" value="Login" /></td>
-      </tr>
-    </table>
-  </form>
+      <div>
+        <button type="submit" class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-[#ba9972] hover:bg-[#ba9972] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#ba9972]"> 
+          Sign in
+        </button>
+      </div>
+    </form>
 
-  {% if messages %}
-  <ul>
-    {% for message in messages %}
-    <li>{{ message }}</li>
-    {% endfor %}
-  </ul>
-  {% endif %} Don't have an account yet?
-  <a href="{% url 'main:register' %}">Register Now</a>
+    {% if messages %}
+    <div class="mt-4">
+      {% for message in messages %}
+      {% if message.tags == "success" %}
+            <div class="bg-[#bca57b] border border-[#ba444a] text-[#8a3a3f] px-4 py-3 rounded relative" role="alert"> <!-- Pesan sukses -->
+                <span class="block sm:inline">{{ message }}</span>
+            </div>
+        {% elif message.tags == "error" %}
+            <div class="bg-[#f8d7da] border border-[#f5c6cb] text-[#721c24] px-4 py-3 rounded relative" role="alert"> <!-- Pesan error -->
+                <span class="block sm:inline">{{ message }}</span>
+            </div>
+        {% else %}
+            <div class="bg-[#cce5ff] border border-[#b8daff] text-[#004085] px-4 py-3 rounded relative" role="alert"> <!-- Pesan info -->
+                <span class="block sm:inline">{{ message }}</span>
+            </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="text-center mt-4">
+      <p class="text-sm text-[#73714e]"> 
+        Don't have an account yet?
+        <a href="{% url 'main:register' %}" class="font-bold text-[#ba9972] hover:text-[#bca57b]"> 
+          Register Now
+        </a>
+      </p>
+    </div>
+  </div>
 </div>
-
 {% endblock content %}

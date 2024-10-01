@@ -1,64 +1,52 @@
 {% extends 'base.html' %}
 {% load static %}
+
+{% block meta %}
+<title>Heritage Craft E-Commerce</title>
+{% endblock meta %}
+
 {% block content %}
-<h1>Heritage Craft E-Commerce</h1>
+{% include 'navbar.html' %}
 
-<h5>NPM: </h5>
-<p>{{ npm }}<p>
+<div class="overflow-x-hidden px-6 md:px-24 pb-12 pt-28 min-h-screen bg-[#f1ebe0] flex flex-col"> <!-- Background -->
+    <div class="p-2 mb-6 relative">
+        <div class="relative grid grid-cols-1 z-20 md:grid-cols-3 gap-6">
+            {% include "card_info.html" with title='NPM' value=npm %}
+            {% include "card_info.html" with title='Name' value=name %}
+            {% include "card_info.html" with title='Class' value=class %}
+        </div>
 
-<h5>Name:</h5>
-<p>{{ name }}</p>
+        <!-- Jarak antara kotak info pengguna dan last login -->
+        <div class="flex justify-center my-8">
+            <div class="flex rounded-md items-center bg-[#ba8972] py-4 px-6 shadow-lg">
+                <h1 class="text-white text-center font-semibold">Last Login: {{ last_login }}</h1>
+            </div>
+        </div>
 
-<h5>Class:</h5>
-<p>{{ class }}</p>
+        <!-- Tautan Tambah Produk -->
+        <div class="flex justify-end mb-8 px-24">
+            <a href="{% url 'main:create_product_entry' %}">
+                <button class="bg-[#ba8972] hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300 ease-in-out">
+                    Add New Product Entry
+                </button>
+            </a>
+        </div>
 
-{% if not product_entries %}
-<p>Belum ada data product pada Heritage Craft E-Commerce.</p>
-{% else %}
-<table>
-  <tr>
-    <th>Product Name</th>
-    <th>Price</th>
-    <th>Description</th>
-    <th>Image</th>
-    <th>Category</th>
-    <th>Place of Origin</th>
-    <th>Stock</th>
-    <th>Availability</th>
-  </tr>
+        <!-- Pesan jika tidak ada produk -->
+        {% if not product_entries %}
+        <div class="flex flex-col items-center justify-center min-h-[24rem] p-8">
+            <img src="{% static 'images/sedih-banget.png' %}" alt="No products" class="w-40 h-40 mb-6"/>
+            <p class="text-center text-gray-600 mt-6">No products available yet in Heritage Craft.</p>
+        </div>
+        {% else %}
+        <!-- Menampilkan produk menggunakan grid layout -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-full mt-8">
+            {% for product_entry in product_entries %}
+                {% include 'card_product.html' with product=product_entry %}
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</div>
 
-  {% comment %} Berikut cara memperlihatkan data mood di bawah baris ini 
-  {% endcomment %} 
-  {% for product_entry in product_entries %}
-  <tr>
-    <td>{{product_entry.name}}</td>
-    <td>{{product_entry.price}}</td>
-    <td>{{product_entry.description}}</td>
-    <td>
-        <a href="{{ product_entry.image }}" target="_blank">
-          <img src="{{ product_entry.image }}" alt="{{ product_entry.name }}" width="100" height="100">
-        </a>
-    </td>
-    <td>{{product_entry.category}}</td>
-    <td>{{product_entry.place_of_origin}}</td>
-    <td>{{product_entry.stock}}</td>
-    <td>{{product_entry.availability}}</td>
-  </tr>
-  {% endfor %}
-</table>
-{% endif %}
-
-<br />
-
-<a href="{% url 'main:create_product_entry' %}">
-  <button>Add New Product Entry</button>
-</a>
-
-<a href="{% url 'main:logout' %}">
-  <button>Logout</button>
-</a>
-
-<h5>Sesi terakhir login: {{ last_login }}</h5>
-<!-- <img src="https://private-user-images.githubusercontent.com/178132521/369440162-07b0f8d4-fddc-410c-8f09-fca5f11a0b70.jpg?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MjY4NDIzODYsIm5iZiI6MTcyNjg0MjA4NiwicGF0aCI6Ii8xNzgxMzI1MjEvMzY5NDQwMTYyLTA3YjBmOGQ0LWZkZGMtNDEwYy04ZjA5LWZjYTVmMTFhMGI3MC5qcGc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjQwOTIwJTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI0MDkyMFQxNDIxMjZaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT03N2RiMDg4ZDI2YTg3ZTJiZjAxYjM1YmJjMzMzMTQ0ZTc1NDE1NzYwZDc5MmRhMGE0NzQ1NTY5MTBlOGViZGUzJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9.q90XsYGsM-qLY0WuWBabg3FdFZ8RQiPlla6c08AA8sQ"> -->
 {% endblock content %}
-

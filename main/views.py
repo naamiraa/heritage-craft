@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.core import serializers
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, reverse
 from main.forms import ProductForm
 from main.models import Product
 
@@ -12,7 +12,6 @@ import datetime
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
-from django.shortcuts import get_object_or_404, redirect
 
 # Create your views here.
 @login_required(login_url='/login')
@@ -28,6 +27,25 @@ def show_main(request):
     }
 
     return render(request, "main.html", context)
+
+
+
+def show_products(request):
+    # Ambil semua produk dari database
+    product_entries = Product.objects.filter(user=request.user)
+
+    # Render ke template 'products.html' hanya dengan card product
+    return render(request, 'products.html', {'product_entries': product_entries})
+
+def show_category(request, category_name):
+    # Filter produk berdasarkan kategori yang dipilih
+    product_entries = Product.objects.filter(category__iexact=category_name, user=request.user)
+    context = {
+        'product_entries': product_entries,
+        'selected_category': category_name,
+    }
+    return render(request, 'category_page.html', context)
+
 
 def create_product_entry(request):
     form = ProductForm(request.POST or None)
@@ -93,3 +111,30 @@ def logout_user(request):
     response = HttpResponseRedirect(reverse('main:login'))
     response.delete_cookie('last_login')
     return response
+
+def edit_product(request, id):
+    # Get product entry berdasarkan id
+    product = Product.objects.get(pk = id)
+
+    # Set product sebagai instance dari form
+    form = ProductForm(request.POST or None, instance=product)
+
+    if form.is_valid() and request.method == "POST":
+        # Simpan form dan kembali ke halaman awal
+        form.save()
+        return HttpResponseRedirect(reverse('main:show_main'))
+    
+    context = {'form': form}
+    return render(request, "edit_product.html", context)
+
+
+def delete_product(request, id):
+    #Get product berdasarkan id
+    product = Product.objects.get(pk = id)
+
+    #Hapus product
+    product.delete()
+
+    #Kembali ke halaman awal
+    return HttpResponseRedirect(reverse('main:show_main'))
+    

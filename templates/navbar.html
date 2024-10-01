@@ -1,0 +1,79 @@
+<nav class="bg-gradient-to-r from-gray-700 to-[#ba8972] p-6 shadow-lg">
+    <div class="container mx-auto flex items-center justify-between">
+        <!-- Logo for desktop -->
+        <div class="text-white text-2xl font-bold">
+            HERITAGE CRAFT
+        </div>
+
+        <!-- Hamburger icon for mobile -->
+        <div class="block lg:hidden">
+            <button class="text-white focus:outline-none" id="navbar-toggle">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Menu for desktop -->
+        <div class="hidden lg:flex lg:space-x-4">
+            <a href="{% url 'main:show_main' %}" class="text-white hover:text-gray-200 transition duration-300 text-lg">Home</a>
+            <a href="{% url 'main:show_products' %}" class="text-white hover:text-gray-200 transition duration-300 text-lg">Products</a>
+
+                <!-- Dropdown Categories -->
+                <div class="relative group">
+                    <a href="#" class="text-white hover:text-gray-200 transition duration-300 text-lg">Categories</a>
+                    <div class="absolute hidden group-hover:block bg-white shadow-lg rounded-lg mt-1 z-50">
+                        <a href="{% url 'main:show_category' 'Songket' %}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Songket</a>
+                        <a href="{% url 'main:show_category' 'Tas' %}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Tas</a>
+                        <a href="{% url 'main:show_category' 'Batik' %}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Batik</a>
+                        <a href="{% url 'main:show_category' 'Ulos' %}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Ulos</a>
+                    </div>
+                </div>
+
+
+            <span class="text-white text-lg">Welcome, {{ user.username }}</span>
+            <a href="{% url 'main:logout' %}" class="bg-red-600 text-white py-1 px-3 rounded hover:bg-red-500 text-lg">Logout</a>
+        </div>
+    </div>
+
+    <!-- Mobile menu -->
+    <div class="hidden lg:hidden" id="navbar-menu">
+        <a href="{% url 'main:show_main' %}" class="block text-white hover:bg-gray-700 px-4 py-2">Home</a>
+        <a href="{% url 'main:show_products' %}" class="block text-white hover:bg-gray-700 px-4 py-2">Products</a>
+
+        <!-- Dropdown Categories for Mobile -->
+        <div class="relative">
+            <button id="mobile-dropdown-toggle" class="block text-white hover:bg-gray-700 px-4 py-2 w-full text-left">
+                Categories
+            </button>
+            <div id="mobile-dropdown-menu" class="hidden bg-white rounded-lg shadow-lg mt-1 z-50">
+                <a href="{% url 'main:show_category' 'Songket' %}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Songket</a>
+                <a href="{% url 'main:show_category' 'Tas' %}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Tas</a>
+                <a href="{% url 'main:show_category' 'Batik' %}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Batik</a>
+                <a href="{% url 'main:show_category' 'Ulos' %}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Ulos</a>
+            </div>
+        </div>
+
+        <span class="block text-white px-4 py-2">Welcome, {{ user.username }}</span>
+        <a href="{% url 'main:logout' %}" class="block bg-red-600 text-white hover:bg-red-500 px-4 py-2">Logout</a>
+    </div>
+</nav>
+
+<script>
+    const navbarToggle = document.getElementById('navbar-toggle');
+    const navbarMenu = document.getElementById('navbar-menu');
+    const mobileDropdownToggle = document.getElementById('mobile-dropdown-toggle');
+    const mobileDropdownMenu = document.getElementById('mobile-dropdown-menu');
+
+    // Toggle navbar menu for mobile
+    navbarToggle.addEventListener('click', () => {
+        navbarMenu.classList.toggle('hidden');
+    });
+
+    // Toggle mobile dropdown menu
+    mobileDropdownToggle.addEventListener('click', () => {
+        console.log('Dropdown toggled'); // Check if this logs when clicked
+        mobileDropdownMenu.classList.toggle('hidden');
+    });
+</script>
+
