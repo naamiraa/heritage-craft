@@ -167,12 +167,9 @@ Penyerang dapat mengirim permintaan dari situs eksternal atau skrip yang menyeba
 3. Membuka settings.py dan menambahkan kode berikut agar berkas ``base.html`` terdeteksi sebagai templates
 ```python
 TEMPLATES = [
-    {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [BASE_DIR / 'templates'], # Tambahkan konten baris ini
         'APP_DIRS': True,
-        ...
-    }
 ]
 ```
 3. Memperbarui isi file ``main.html`` yang ada pada direktori main agar menggunakan ``base.html`` sebagai template utama
@@ -192,19 +189,13 @@ TEMPLATES = [
     - Menambahkan import ``HttpResponse`` dan ``Serializer`` pada bagian paling atas berkas ``views.py``
     - Membuat function baru yang menerima parameter request dengan nama ``show_XML`` dan membuat sebuah variabel yang menyimpan query dari seluruh data yang ada pada ``Product`` seperti berikut:
     ```python
-            {
-                def show_xml(request):
-                    data = Product.objects.all()
-                    return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
-            }
-    ```
+        def show_xml(request):
+            data = Product.objects.all()
+            return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
+```
     - Menambahkan import fungsi yang telah dibuat (show_XML) ke dalam ``urls.py`` dan menambahkan path url ke dalam ``urlpatterns`` seperti berikut:
         ```python
-            {
-            ...
             path('xml/', show_xml, name='show_xml'),
-            ...
-            }
         ```
     - Coba menjalankan proyek Django dengan perintah ``python manage.py runserver`` dan membuka local host yang ditambahkan path xml/ serta memastikan data yang ada sesuai dengan objek yang telah saya tambahkan sebelumnya
     - Saya melakukan hal yang sama (mulai bullet 2 - 4) untuk format JSON dengan menyesuaikan nama function, variabel, contect_type, serta path yang digunakan agar sesuai dengan ketentuan format JSON
@@ -281,35 +272,27 @@ Saya juga membatasi akses ke halaman main agar hanya dapat diakses oleh pengguna
 ### Membuat implementasi logout
 Pada ``views.py`` saya melakukan import ``logout`` serta menambahkan fungsi baru dengan nama ``logout_user`` dengan kode berikut:
 ```python
-        {
 def logout_user(request):
     logout(request)
     return redirect('main:login')
-        }
 ```
 ``logout(request)`` digunakan untuk menghapus sesi pengguna yang saat ini masuk dan ``return redirect('main:login')`` mengarahkan user untuk ke halaman login dalam aplikasi Django.
 Kemudian pada berkas ``main.html`` saya menambahkan button logout di bagian paling bawah untuk mengarahkan ke URL berdasarkan app_name dan name yang sudah didefinisikan di urls.py 
-```python
-        {
-...
+```html
 <a href="{% url 'main:logout' %}">
   <button>Logout</button>
 </a>
-...
-        }
 ```
 Setelah itu import fungsi logout_user yang telah ditambahkan ke views.py tadi ke dalam ``urls.py`` dan menambahkan path url ke dalam ``urlpatterns``
 
 ### Implementasi Cookies dan last login
 Import ``datetime``, ``HttpsResponseRedirect``, dan ``reverse`` kemudian menambahkan fungsionalitas cookies di fungsi ``login_user`` pada ``views.py`` agar setiap login datanya disimpan di cookies dan dapat diakses. Lalu, saya menambahkan potongan kode ``'last_login': request.COOKIES['last_login']`` ke dalam variable context pada fungsi show_main dan juga mengubah fungsi ``logout_user`` menjadi berikut:
 ```python
-        {
 def logout_user(request):
     logout(request)
     response = HttpResponseRedirect(reverse('main:login'))
     response.delete_cookie('last_login')
     return response
-        }
 ```
 ``response.delete_cookie('last_login')`` berfungsi untuk menghapus cookie last_login saat pengguna melakukan logout
 Setelah itu, saya menambahkan informasi sesi terakhir login pada bagian setelah button logout pada file ``main.html``
@@ -317,15 +300,11 @@ Setelah itu, saya menambahkan informasi sesi terakhir login pada bagian setelah 
 ### Menghubungkan Model Product dengan User
 Import ``from django.contrib.auth.models import User`` pada ``models.py`` dan menambahkan kode berikut pada model Product yang berfungsi untuk menghubungkan satu product dengan satu user melalui sebuah relationship, dimana sebuah Product pasti terasosiasikan dengan seorang user.
 ```python
-        {
 class MoodEntry(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    ...
-        }
 ```
 Lalu, mengubah fungsi create_product_entry menjadi berikut:
 ```python
-        {
 def create_product_entry(request):
     form = Product(request.POST or None)
 
@@ -337,8 +316,6 @@ def create_product_entry(request):
 
     context = {'form': form}
     return render(request, "create_product_entry.html", context)
- ...
-        }
 ```
 kemudian mengubah value ``product`` menjadi ``product_entries = Product.objects.filter(user=request.user)`` nam variable ``name`` pada context diubah menjadi ``'name' : request.user.username,``
 
@@ -354,40 +331,32 @@ Dalam CSS, jika ada beberapa selector yang diterapkan pada elemen HTML yang sama
 **a. Inline styles**
 Inline style adalah style yang ditulis langsung dalam atribut HTML (apapun yang berada di dalam tag tersebut), contohnya sebagai berikut:
 ```html
-    {
     <p style="color: blue;">Teks ini berwarna biru.</p>
-    }
 ```
 CSS yang ditulis langsung di elemen HTML menggunakan atribut style. Inline CSS memiliki prioritas tertinggi.
 
 **b. ID Selector**
 Selector yang menggunakan # diikuti dengan nama ID memiliki spesifisitas tinggi. Contoh:
 ```css
-    {
 #judul {
     color: blue;
 }
-    }
 ```
 
 **c. Class selector, Attribute Selector, dan Pseudo-class Selector**
 Class selector (menggunakan . diikuti nama class), attribute selector (misalnya [type="text"]), dan pseudo-class selector (misalnya :hover) memiliki spesifisitas yang lebih rendah dari ID. Contohnya:
 ```css
-    {
 .judul {
   color: green;
 }
-    }
 ```
 
 **d. Element selector dan Pseudo-element Selector**
 Selector elemen (misalnya p, h1, div) dan pseudo-element selector (misalnya ::before, ::after) memiliki spesifisitas terendah. Contoh:
 ```css
-    {
 p {
   color: yellow;
 }
-    }
 ```
 
 **Catatan tambahan:***
@@ -395,13 +364,10 @@ p {
 - Penggunaan ``!important`` akan mengesampingkan semua prioritas di atas dan memaksa elemen menggunakan gaya yang ditentukan
 Contoh:
 ```html
-    {
 <p id="judul" class="judul">Teks ini memiliki banyak selector</p>
-}
 ```
 Memiliki aturan - aturan berikut: 
 ```css
-    {
 p {
   color: yellow; /* 1 */
 }
@@ -416,7 +382,6 @@ p {
 
 p {
   color: red !important; /* 4 */
-}
 }
 ```
 Dalam contoh di atas:
@@ -453,15 +418,12 @@ Margin, border, dan padding adalah properti dalam CSS yang digunakan untuk menga
     - Ciri Utama: Margin bersifat transparan, tidak memiliki warna atau properti lain.
     Cara implementasi: 
     ```css
-    {
     div {
         margin: 20px; /* Menambahkan ruang 20px di semua sisi elemen */
         margin-top: 10px; /* Ruang khusus di bagian atas */
         margin-right: 15px; /* Ruang khusus di sebelah kanan */
         margin-bottom: 10px; /* Ruang khusus di bagian bawah */
         margin-left: 5px; /* Ruang khusus di sebelah kiri */
-    }
-
     }
     ```
 
@@ -470,13 +432,11 @@ Margin, border, dan padding adalah properti dalam CSS yang digunakan untuk menga
     - Ciri Utama: Border terlihat secara visual dan bisa disesuaikan tampilannya.
     Cara implementasi:
     ```css
-    {
         div {
             border: 2px solid black; /* Border hitam dengan ketebalan 2px */
             border-top: 3px dashed red; /* Border atas dengan garis putus-putus merah */
             border-radius: 10px; /* Membuat border melengkung di sudut-sudut */
         }
-    }
     ```
 
 3. Padding
@@ -484,34 +444,28 @@ Margin, border, dan padding adalah properti dalam CSS yang digunakan untuk menga
     - Ciri Utama: Padding juga bersifat transparan, tetapi dapat memperluas ukuran elemen karena elemen akan meluas ke luar untuk menampung ruang padding.
     Cara implementasi:
     ```css
-    {
         div {
-        padding: 20px; /* Ruang 20px di semua sisi konten dalam elemen */
-        padding-top: 10px; /* Ruang khusus di bagian atas */
-        padding-right: 15px; /* Ruang khusus di sebelah kanan */
-        padding-bottom: 10px; /* Ruang khusus di bagian bawah */
-        padding-left: 5px; /* Ruang khusus di sebelah kiri */
+            padding: 20px; /* Ruang 20px di semua sisi konten dalam elemen */
+            padding-top: 10px; /* Ruang khusus di bagian atas */
+            padding-right: 15px; /* Ruang khusus di sebelah kanan */
+            padding-bottom: 10px; /* Ruang khusus di bagian bawah */
+            padding-left: 5px; /* Ruang khusus di sebelah kiri */
         }
-    }
     ```
 
 Contoh implementasi margin, borderm dan padding secara bersamaan:
 ```html
-    {
-        <div class="box">
-        Konten di dalam elemen.
-        </div>
-    }
+    <div class="box">
+    Konten di dalam elemen.
+    </div>
 ```
 
 ```css
-{
     .box {
     margin: 20px; /* Jarak dari elemen di sekitarnya */
     border: 2px solid black; /* Garis border hitam */
     padding: 15px; /* Jarak antara border dan konten */
     }
-}
 ```
 Jika elemen tersebut adalah sebuah kotak:
 - Margin adalah ruang di luar kotak yang memisahkan kotak dari elemen lain.
@@ -550,7 +504,6 @@ Keduanya adalah alat yang kuat untuk menciptakan desain web yang responsif dan f
 a. Edit Product
 - membuat fungsi ``edit_product`` di ``views.py`` yang menerima parameter id product. Saya mengambil objek product dari database kemudian render form dengan data product yang ada
 ``` python
-{
 def edit_product(request, id):
     # Get product entry berdasarkan id
     product = Product.objects.get(pk = id)
@@ -565,13 +518,10 @@ def edit_product(request, id):
     
     context = {'form': form}
     return render(request, "edit_product.html", context)
-}
 ```
 - Menambahkan path baru di urls.py untuk mengedit product
 ``` python
-{
     path('edit-product/<uuid:id>', edit_product, name='edit_product'),
-}
 ```
 - Membuat file baru dengan nama ``edit_product.html`` di folder ``templates/main`` dan menambahkan styling menggunakan CSS framework
 - Memperbarui isi file ``main.html`` agar terdapat button untuk edit product
@@ -579,7 +529,6 @@ def edit_product(request, id):
 b. Delete Product
 - membuat fungsi ``delete_product`` di ``views.py`` yang akan menghapus produk berdasar id
 ``` python
-{
 def delete_product(request, id):
     #Get product berdasarkan id
     product = Product.objects.get(pk = id)
@@ -589,13 +538,10 @@ def delete_product(request, id):
 
     #Kembali ke halaman awal
     return HttpResponseRedirect(reverse('main:show_main'))
-}
 ```
 - Menambahkan path baru di urls.py untuk menghapus product
 ``` python
-{
     path('delete/<uuid:id>', delete_product, name='delete_product'),
-}
 ```
 - Memperbarui isi file ``main.html`` agar terdapat button untuk delete product
 
@@ -615,4 +561,4 @@ def delete_product(request, id):
 - Styling halaman login, register, add product, edit product
 
 
-**Setelah semua implementasi selesai, saya melakukan ``git add``, ``git commit``, dan ``git push`` ke github.
+**Setelah semua implementasi selesai, saya melakukan ``git add``, ``git commit``, dan ``git push`` ke github.**
