@@ -409,7 +409,7 @@ Contoh aplikasi yang sudah menerapkan responsif web:
 - Twitter. Twitter menggunakan responsive design dengan sangat baik. Baik di perangkat seluler maupun desktop, tampilan timeline, navigasi, dan fitur lainnya menyesuaikan dengan ukuran layar tanpa mengurangi kualitas pengalaman pengguna.
 
 Contoh aplikasi yang belum menerapkan rensponsif web:
-Website lama yang mungkin hanya didesain untuk ukuran desktop dan tidak terlihat baik di perangkat mobile.
+Contoh website yang tidak responsif adalah SIAK-NG. Tampilan website ini tidak belum dapat menyesuaikan dan adaptif terhadao ukuran layar pengguna.
 
 ## 3. Perbedaan antara margin, border, dan padding, serta cara untuk mengimplementasikan ketiga hal tersebut!
 Margin, border, dan padding adalah properti dalam CSS yang digunakan untuk mengatur ruang di sekitar dan di dalam elemen HTML. 
