@@ -192,7 +192,7 @@ TEMPLATES = [
         def show_xml(request):
             data = Product.objects.all()
             return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
-```
+    ```
     - Menambahkan import fungsi yang telah dibuat (show_XML) ke dalam ``urls.py`` dan menambahkan path url ke dalam ``urlpatterns`` seperti berikut:
         ```python
             path('xml/', show_xml, name='show_xml'),
