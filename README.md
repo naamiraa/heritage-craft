@@ -562,3 +562,35 @@ def delete_product(request, id):
 
 
 **Setelah semua implementasi selesai, saya melakukan ``git add``, ``git commit``, dan ``git push`` ke github.**
+
+
+
+# (TUGAS 6)
+**1. Manfaat dari penggunaan JavaScript dalam pengembangan aplikasi web!**
+- JavaScript muncul sebagai teknologi sisi peramban untuk menjadikan aplikasi web lebih dinamis. Dengan JavaScript, browser dapat merespons interaksi pengguna dan mengubah tata letak konten di halaman web. sumber: [https://aws.amazon.com/id/what-is/javascript/]
+JavaScript memungkinkan pengembang untuk menambahkan elemen interaktif pada halaman web, seperti dropdown menu, slider gambar, dan modals.
+- Manipulasi DOM: Dengan JavaScript, pengembang dapat mengubah, menambah, atau menghapus elemen HTML secara langsung setelah halaman dimuat. Ini memungkinkan pembuatan aplikasi web yang lebih responsif.
+- Validasi formulir: JavaScript dapat digunakan untuk melakukan validasi form di sisi klien, memastikan bahwa data yang dimasukkan oleh pengguna benar sebelum dikirim ke server sehingga mengurangi beban pada server dan meningkatkan kecepatan feedback kepada user. sumber: [https://www.niagahoster.co.id/blog/javascript-adalah]
+- Pengolahan data asynchronous: Dengan penggunaan AJAX (Asynchronous JavaScript and XML), JavaScript memungkinkan pengambilan dan pengiriman data ke server tanpa perlu memuat ulang halaman.
+- Kompatibilitas: JavaScript didukung oleh semua browser modern, sehingga aplikasi web yang dibangun dengan JavaScript dapat diakses di berbagai platform dan perangkat. sumber: [https://www.binar.co.id/blog/apa-itu-javascript-manfaat-fungsi-dan-contohnya]
+
+
+**2. Fungsi dari penggunaan await ketika kita menggunakan fetch()! Apa yang akan terjadi jika kita tidak menggunakan await?**
+Penggunaan ```await``` saat menggunakan ```fetch()``` berfungsi untuk menunggu hasil dari Promise yang dikembalikan oleh fungsi ``fetch()`` sebelum melanjutkan eksekusi kode berikutnya. Ketika kita menggunakan ```await```, kode akan "tertahan" hingga ```Promise``` selesai, yang berarti kita mendapatkan hasil response dari server sebelum melakukan operasi lebih lanjut, seperti mengonversi response ke format JSON atau memproses data yang diterima. sumber: [https://id.javascript.info/async-await]
+
+Jika kita tidak menggunakan ```await```, kode akan tetap berjalan tanpa menunggu response dari ```fetch()```, yang dapat menyebabkan beberapa masalah. Misalnya, jika kita mencoba untuk memproses data dari response sebelum response tersebut diterima, maka kita mungkin mendapatkan error, atau hasil yang tidak diinginkan, karena data yang ingin kita akses belum tersedia. Dengan kata lain, tanpa ```await```, kita tidak dapat menjamin urutan eksekusi kode, yang dapat mengakibatkan bug atau perilaku yang tidak terduga dalam aplikasi.
+
+**3. Mengapa kita perlu menggunakan decorator csrf_exempt pada view yang akan digunakan untuk AJAX POST?**
+Penggunaan decorator``` @csrf_exempt``` untuk AJAX POST sangat penting karena alasan keamanan terkait Cross-Site Request Forgery (CSRF). CSRF adalah serangan yang mencoba memanfaatkan otentikasi pengguna yang sah untuk melakukan tindakan yang tidak diinginkan tanpa sepengetahuan pengguna. sumbr:[https://brightsec.com/blog/cross-site-request-forgery-csrf]
+
+Ketika kita mengirimkan permintaan POST menggunakan AJAX, Django secara otomatis memeriksa token CSRF untuk memastikan bahwa permintaan tersebut berasal dari sumber yang sah. Jika token CSRF tidak valid atau tidak ada, Django akan menghalangi permintaan tersebut dan mengembalikan error 403 (Forbidden). Namun, dalam beberapa situasi, seperti saat kita ingin menangani permintaan AJAX dari sumber yang mungkin tidak mengirimkan token CSRF (misalnya, saat pengujian atau integrasi dengan aplikasi frontend), kita perlu menonaktifkan pemeriksaan CSRF pada view tertentu.
+
+Dengan menambahkan decorator ```@csrf_exempt```, kita memberi tahu Django untuk tidak melakukan pemeriksaan CSRF pada view tersebut. Hal ini memungkinkan kita untuk menerima permintaan POST tanpa token CSRF, tetapi juga meningkatkan risiko keamanan. Oleh karena itu, penting untuk hanya menggunakan decorator ini pada view yang benar-benar membutuhkan akses tanpa CSRF dan memastikan bahwa tindakan tersebut tidak membahayakan integritas aplikasi kita.
+sumber:[https://docs.djangoproject.com/id/5.1/howto/csrf/]
+
+**4. Pada tutorial PBP minggu ini, pembersihan data input pengguna dilakukan di belakang (backend) juga. Mengapa hal tersebut tidak dilakukan di frontend saja?**
+Pembersihan data input pengguna di backend, meskipun sudah dilakukan di frontend, penting karena:
+- Keamanan: Data yang dikirim dari frontend dapat dimanipulasi oleh pengguna atau penyerang. Meskipun kita dapat melakukan validasi dan pembersihan di frontend, ini tidak dapat diandalkan sepenuhnya karena pengguna dapat menonaktifkan JavaScript atau memodifikasi permintaan AJAX. Dengan melakukan pembersihan di backend, kita dapat memastikan bahwa data yang diterima selalu diperiksa dan divalidasi, sehingga mengurangi risiko serangan seperti SQL injection, XSS, dan jenis serangan lainnya.
+- Format data yang sesuai: Pembersihan di backend membantu menjaga integritas data dalam aplikasi. Misalnya, jika aplikasi menerima data dalam format yang salah, pembersihan dan validasi di backend memastikan bahwa data yang masuk ke dalam database sudah sesuai dengan format yang diharapkan, sehingga menghindari potensi kerusakan data.
+
+**4. Cara mengimplementasikan checklist**
