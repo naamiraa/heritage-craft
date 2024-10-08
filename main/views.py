@@ -15,7 +15,8 @@ from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.utils.html import strip_tags
-
+from django.http import JsonResponse
+from django.core.validators import ValidationError
 
 # Create your views here.
 @login_required(login_url='/login')
@@ -156,6 +157,25 @@ def add_product_entry_ajax(request):
     stock = request.POST.get("stock")
     availability = request.POST.get("availability")
     user = request.user
+
+    errors = {}
+    # Validasi jika name kosong setelah strip_tags
+    if not name:
+        errors['name'] = "Name field cannot be empty."
+    if not description:
+        errors['description'] = "Description field cannot be empty"
+    if not image:
+        errors['image'] = "Image field cannot be empty"
+    if not category:
+        errors['category'] = "Category field cannot be empty"
+    if not place_of_origin:
+        errors['place_of_origin'] = "Place of origin field cannot be empty"
+    if not availability:
+        errors['availability'] = "availability field cannot be empty"
+
+        # Jika ada error, kembalikan respon dengan error
+    if errors:
+        return JsonResponse({'errors': errors}, status=400)
 
     new_product = Product(
         name=name, price=price,

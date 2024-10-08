@@ -58,6 +58,8 @@
                             <div class="mb-4">
                                 <label for="name" class="block text-sm font-medium text-gray-700">Product Name</label>
                                 <input type="text" id="name" name="name" class="mt-1 block w-full border border-gray-300 rounded-md p-2 hover:border-indigo-700" placeholder="Enter product name" required>
+                                <p id="nameError" class="text-red-600"></p>
+
                             </div>
                             <div class="mb-4">
                                 <label for="price" class="block text-sm font-medium text-gray-700">Price</label>
@@ -66,18 +68,24 @@
                             <div class="mb-4">
                                 <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
                                 <textarea id="description" name="description" rows="3" class="mt-1 block w-full h-52 resize-none border border-gray-300 rounded-md p-2 hover:border-indigo-700" placeholder="Describe the product" required></textarea>
+                                <p id="descriptionError" class="text-red-600"></p>
+
                             </div>
                             <div class="mb-4">
                                 <label for="image" class="block text-sm font-medium text-gray-700">Image URL</label>
                                 <textarea id="image" name="image" class="mt-1 block w-full h-52 resize-none border-gray-300 rounded-md p-2 hover:border-indigo-700" placeholder="Enter image URL" required></textarea>
+                                <p id="imageError" class="text-red-600"></p>
                             </div>
                             <div class="mb-4">
                                 <label for="category" class="block text-sm font-medium text-gray-700">Category</label>
                                 <input type="text" id="category" name="category" class="mt-1 block w-full border border-gray-300 rounded-md p-2 hover:border-indigo-700" placeholder="Enter product category" required>
+                                <p id="categoryError" class="text-red-600"></p>
                             </div>
                             <div class="mb-4">
                                 <label for="place_of_origin" class="block text-sm font-medium text-gray-700">Place of Origin</label>
                                 <input type="text" id="place_of_origin" name="place_of_origin" class="mt-1 block w-full border border-gray-300 rounded-md p-2 hover:border-indigo-700" required>
+                                <p id="place_of_originError" class="text-red-600"></p>
+
                             </div>
                             <div class="mb-4">
                                 <label for="stock" class="block text-sm font-medium text-gray-700">Stock</label>
@@ -86,14 +94,15 @@
                             <div class="mb-4">
                                 <label for="availability" class="block text-sm font-medium text-gray-700">Availability</label>
                                 <input type="text" id="availability" name="availability" class="mt-1 block w-full border border-gray-300 rounded-md p-2 hover:border-indigo-700" placeholder="In Stock/Out of Stock" required>
+                                <p id="availabilityError" class="text-red-600"></p>
                             </div>
                         </div>
                     </form>
                 </div>
                 <!-- Modal footer -->
                 <div class="flex flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-2 p-6 border-t border-gray-200 rounded-b justify-center md:justify-end">
-                    <button type="button" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg" id="cancelButton">Cancel</button>
-                    <button type="submit" id="submitProductEntry" form="productForm" class="bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg">Save</button>
+                    <button type="button" class="bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded-lg" id="cancelButton">Cancel</button>
+                    <button type="submit" id="submitProductEntry" form="productForm" class="bg-[#ba8972] hover:bg-[#ba8940] text-white font-bold py-2 px-4 rounded-lg">Save</button>
                 </div>
             </div>
         </div>
@@ -103,27 +112,87 @@
 <script>
 
 function addProductEntry() {
+
     fetch("{% url 'main:add_product_entry_ajax' %}", {
-      method: "POST",
-      body: new FormData(document.querySelector('#productForm')),
-    })
-    .then(response => {
-        if (response.ok) {
-            // Jika penambahan produk berhasil
-            refreshProductEntries(); // Memperbarui list produk
-            document.getElementById("productForm").reset(); // Reset form
-            hideModal(); // Tutup modal
-        } else {
-            // Jika gagal, tampilkan error
-            alert("Error: Failed to add product.");
+        method: "POST",
+        body: new FormData(document.querySelector('#productForm')),
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest' // Agar Django mengenali sebagai AJAX request
         }
     })
-    .catch(error => {
-        console.error("Error:", error);
-        alert("Error: Failed to add product.");
-    });
+    .then(response => {
+        if (response.status === 400) {
+            return response.json(); // Jika status 400, berarti ada error dan kita perlu memproses JSON
+        } else if (response.status === 201) {
+            // Jika sukses (201), form berhasil disimpan
+            return {success: true};
+        }
+    })
+    .then(data => {
+        if (data.errors) {
+            // Tangani kesalahan dan tampilkan pesan kesalahan untuk setiap field
+            if (data.errors.name) {
+                document.querySelector('#nameError').innerText = data.errors.name;
+            } else {
+                document.querySelector('#nameError').innerText = "";
+            }
+            if (data.errors.description) {
+                document.querySelector('#descriptionError').innerText = data.errors.description;
+            } else {
+                document.querySelector('#descriptionError').innerText = "";
+            }
+            if (data.errors.image) {
+                document.querySelector('#imageError').innerText = data.errors.image;
+            } else {
+                document.querySelector('#imageError').innerText = "";
+            }
+            if (data.errors.category) {
+                document.querySelector('#categoryError').innerText = data.errors.category;
+            } else {
+                document.querySelector('#categoryError').innerText = "";
+            }
+            if (data.errors.place_of_origin) {
+                document.querySelector('#place_of_originError').innerText = data.errors.place_of_origin;
+            } else {
+                document.querySelector('#place_of_originError').innerText = "";
+            }
+            if (data.errors.availability) {
+                document.querySelector('#availabilityError').innerText = data.errors.availability;
+            } else {
+                document.querySelector('#availabilityError').innerText = "";
+            }
+            clearErrorOnInput();
+        } else if (data.success) {
+            // Jika sukses, segarkan entri produk, reset form, dan tutup modal
+            refreshProductEntries();
+            document.getElementById("productForm").reset(); 
+            clearErrors(); // Call function to clear the errors.
+            hideModal();
+        }
+    })
+    .catch(error => console.error('Error:', error));
 
     return false;
+}
+function clearErrorOnInput() {
+    const fields = ['name', 'description','image', 'category', 'place_of_origin', 'availability'];
+    fields.forEach(field => {
+        const inputField = document.querySelector([name="${field}"]);
+        const errorField = document.getElementById(`${field}Error`);
+        if (inputField) {
+            inputField.addEventListener('input', function() {
+                errorField.innerText = '';  // Hapus pesan error
+            });
+        }
+    });
+}
+
+// This function will clear all error messages when the form is reset
+function clearErrors() {
+    const errorFields = ['nameError', 'descriptionError', 'imageError', 'categoryError', 'place_of_originError', 'availabilityError'];
+    errorFields.forEach(field => {
+        document.getElementById(field).innerText = '';  // Clear error messages
+    });
 }
 
 
